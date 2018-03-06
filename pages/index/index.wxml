@@ -40,20 +40,8 @@
       </view>
     </view>
     <view class='weui-grids funczone'>
-      <view class='weui-grid func'>
-        <view class='weui-grid-label'>日期跳转</view>
-      </view>
-      <view class='weui-grid func'>
-        <view class='weui-grid-label'>分类筛选</view>
-      </view>
-      <view wx:if="{{tapNew}}" class='weui-grid func' bindtap='confirmTap'>
-        <view class='weui-grid-label'>确认</view>
-      </view>
-      <view wx:else class='weui-grid func' bindtap='newTap'>
-        <view class='weui-grid-label'>新增</view>
-      </view>
-      <view class='weui-grid func' bindtap='clearTap'>
-        <view class='weui-grid-label'>清空</view>
+      <view wx:key="*this" wx:for="{{funcs}}" wx:for-item="func" class='weui-grid func' bindtap="{{func.method}}">
+        <view class='weui-grid-label'>{{func.label}}</view>
       </view>
     </view>
   </view>

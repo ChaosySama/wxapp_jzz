@@ -63,7 +63,13 @@ Page({
       { id: 39, type: '交通', price: '39.50', year: '2018', month:'2', day: '20' },
       { id: 40, type: '吃饭', price: '40.20', year: '2018', month:'2', day: '20' },
     ],
-    items: []
+    items: [],
+    funcs:[
+      {label:'日期跳转', method:'toDate'},
+      {label:'分类筛选', method:'typeSelect'},
+      {label:'新增', method:'newItem'},
+      {label:'删除', method:'deleteItem'}
+    ]
   },
   numTap: function (event) {
     if(!this.data.tapNew) return;
@@ -108,11 +114,22 @@ Page({
     }
     this.setData({ inputnum: tempnum });
   },
-  clearTap: function () {
+  redoNumber: function () {
+    if (!this.data.tapNew) return;
+    var tempinum = this.data.inputnum;
+    tempinum = tempinum.substring(0, tempinum.length - 1);
+    if (tempinum == '') {
+      tempinum = '0';
+      this.setData({inputnum:tempinum});
+      return;
+    }
+    this.setData({ inputnum: tempinum });
+  },
+  clearNumber: function () {
     if (!this.data.tapNew) return;
     this.setData({ inputnum: '0', inputdot: false });
   },
-  confirmTap: function () {
+  confirmNumber: function () {
     var price = this.data.inputnum;
     if (parseFloat(price) == 0) {
       wx.showToast({
@@ -153,14 +170,34 @@ Page({
     }
     this.setData({ inputnum: tempnum });
   },
-  newTap: function() {
+  toOrigin: function() {
+    var tempfuncs = [
+      { label: '日期跳转', method: 'toDate' },
+      { label: '分类筛选', method: 'typeSelect' },
+      { label: '新增', method: 'newItem' },
+      { label: '删除', method: 'deleteItem' }
+    ];
+    this.setData({ funcs: tempfuncs });
+    var tapNewflag = this.data.tapNew;
+    if(tapNewflag){
+      this.setData({ tapNew: false, hidenew: 'none' });
+    }
+  },
+  newItem: function() {
     var tempitems = this.data.allItems.slice(-20);
     this.setData({ items: tempitems });
     var tempposup = tempitems[0].id - 1;
     var tempposdown = tempitems[tempitems.length - 1].id-1;
+    var tempfuncs = [
+      { label: '确认', method: 'confirmNumber' },
+      { label: '←', method: 'redoNumber' },
+      { label: '清空', method: 'clearNumber' },
+      { label: '返回', method: 'toOrigin' }
+    ];
     this.setData({ posUp: tempposup, posDown: tempposdown });
-    this.setData({tapNew: true,hidenew:'flex'});
+    this.setData({ tapNew: true,hidenew:'flex'});
     this.setData({ toView: 'newitem'});
+    this.setData({ funcs: tempfuncs});
   },
   onLoad: function () {
     var res = wx.getSystemInfoSync();
