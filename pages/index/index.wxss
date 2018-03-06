@@ -1,0 +1,192 @@
+/**index.wxss**/
+.body {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.navi {
+  flex: none;
+  width: 100%;
+}
+
+.header {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  border-top: 1rpx solid grey;
+  border-bottom: 1rpx solid grey;
+}
+
+.header view {
+  height: 80rpx;
+  line-height: 80rpx;
+  flex: 6;
+  text-align: center;
+}
+
+.header image {
+  flex: 1;
+  height: 20rpx;
+  width: 20rpx;
+}
+
+.header button {
+  height: 80rpx;
+  line-height: 80rpx;
+  flex: 2;
+  background: none;
+  border-left: 1rpx solid grey;
+  border-radius: 0;
+}
+
+.header button::after {
+  border: none;
+}
+
+.total {
+  display: flex;
+  flex-direction: column;
+  border: none;
+  border-bottom: 2rpx solid grey;
+  margin: 0 3%;
+  padding: 10rpx 3%;
+}
+
+.total .year {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  font-size: 30rpx;
+}
+
+.year .date {
+  width: 18%;
+}
+
+.year .in {
+  width: 50%;
+}
+
+.year .out {
+  width: 35%;
+}
+
+.content {
+  flex: auto;
+  height: 100%;
+  overflow-y: auto;
+}
+
+.detail {
+  margin: 20rpx 5%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.detail .item {
+  display: flex;
+  flex-direction: row;
+  border: 3rpx solid black;
+  border-radius: 10rpx;
+  padding: 0 10rpx;
+  margin: 15rpx 0;
+}
+
+.detail .item .price {
+  border-left: 3rpx solid black;
+  border-right: 3rpx solid black;
+  margin: 0 10rpx;
+  padding: 0 20rpx;
+  height: 60rpx;
+  line-height: 60rpx;
+  font-size: 50rpx;
+  text-align: center;
+  overflow: hidden;
+}
+
+.detail .newitem {
+  display: flex;
+  flex-direction: row;
+  border: 3rpx dashed grey;
+  border-radius: 10rpx;
+  padding: 0 10rpx;
+  margin: 15rpx 0;
+}
+
+.detail .newitem .price {
+  border-left: 3rpx dashed grey;
+  border-right: 3rpx dashed grey;
+  margin: 0 10rpx;
+  padding: 0 20rpx;
+  height: 60rpx;
+  line-height: 60rpx;
+  min-width: 220rpx;
+  max-width: 320rpx;
+  font-size: 50rpx;
+  text-align: center;
+  overflow: hidden;
+}
+
+
+.calculator {
+  z-index: 99;
+  width: 92%;
+  position: relative;
+  left: 4%;
+  flex: none;
+  bottom: 5rpx;
+  padding-left: 1%;
+  padding-top: 20rpx;
+  border: none;
+  border-top: 2rpx solid grey;
+  display: flex;
+}
+
+.numzone {
+  top: 0;
+  width: 70%;
+  border: none;
+}
+
+.funczone {
+  top: 0;
+  width: 30%;
+  border: none;
+}
+
+.numzone .weui-grid {
+  height: 15%;
+  line-height:15%;
+  width: 30%;
+  text-align: center;
+  margin: 1%;
+  border: 2rpx grey solid;
+  border-radius: 15rpx;
+}
+
+.funczone .weui-grid {
+  height: 15%;
+  line-height:15%;
+  width: 96%;
+  text-align: center;
+  margin: 2.3% 2%;
+  border: 2rpx grey solid;
+  border-radius: 15rpx;
+}
+
+.weui-grid .weui-grid-label {
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.number {
+  font-size: 50rpx;
+}
+
+.func {
+  font-size: 30rpx;
+}

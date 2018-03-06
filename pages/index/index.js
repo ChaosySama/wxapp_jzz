@@ -1,0 +1,250 @@
+//index.js
+//获取应用实例
+const app = getApp()
+
+Page({
+  data: {
+    winHeight: 0,
+    inputnum: '0',
+    year: new Date().getFullYear(),
+    month: new Date().getMonth()+1,
+    day: new Date().getDate(),
+    lastyearout: 0,
+    lastyearin: 0,
+    thisyearout: 0,
+    thisyearin: 0,
+    toView: '',
+    hidenew: 'none',
+    tapNew: false,
+    posUp: 0,
+    posDown: 0,
+    loadup: false,
+    loaddown: false,
+    numzone:['1','2','3','4','5','6','7','8','9','+/-','0','.'],
+    allItems: [
+      { id: 1, type: '交通', price: '1.50', year: '2017', month: '2', day: '17' },
+      { id: 2, type: '衣服', price: '-2.88', year: '2017', month: '2', day: '17' },
+      { id: 3, type: '交通', price: '3.20', year: '2018', month: '2', day: '17' },
+      { id: 4, type: '吃饭', price: '4.00', year: '2018', month: '2', day: '17' },
+      { id: 5, type: '交通', price: '5.50', year: '2018', month:'2', day: '18' },
+      { id: 6, type: '交通', price: '6.50', year: '2018', month:'2', day: '18' },
+      { id: 7, type: '交通', price: '7.50', year: '2018', month:'2', day: '18' },
+      { id: 8, type: '吃饭', price: '8.20', year: '2018', month:'2', day: '18' },
+      { id: 9, type: '交通', price: '9.50', year: '2018', month:'2', day: '18' },
+      { id: 10, type: '衣服', price: '10.88', year: '2018', month:'2', day: '19' },
+      { id: 11, type: '交通', price: '11.20', year: '2018', month:'2', day: '19' },
+      { id: 12, type: '吃饭', price: '12.00', year: '2018', month:'2', day: '19' },
+      { id: 13, type: '交通', price: '13.50', year: '2018', month:'2', day: '19' },
+      { id: 14, type: '交通', price: '14.50', year: '2018', month:'2', day: '19' },
+      { id: 15, type: '交通', price: '15.50', year: '2018', month:'2', day: '20' },
+      { id: 16, type: '吃饭', price: '16.20', year: '2018', month:'2', day: '20' },
+      { id: 17, type: '交通', price: '17.50', year: '2018', month:'2', day: '20' },
+      { id: 18, type: '交通', price: '18.50', year: '2018', month:'2', day: '20' },
+      { id: 19, type: '交通', price: '19.50', year: '2018', month:'2', day: '20' },
+      { id: 20, type: '吃饭', price: '20.20', year: '2018', month:'2', day: '20' },
+      { id: 21, type: '交通', price: '2111111.50', year: '2018', month: '2', day: '17' },
+      { id: 22, type: '衣服', price: '22222.88', year: '2018', month: '2', day: '17' },
+      { id: 23, type: '交通', price: '23.20', year: '2018', month:'2', day: '17' },
+      { id: 24, type: '吃饭', price: '24.00', year: '2018', month:'2', day: '17' },
+      { id: 25, type: '交通', price: '25.50', year: '2018', month:'2', day: '18' },
+      { id: 26, type: '交通', price: '26.50', year: '2018', month:'2', day: '18' },
+      { id: 27, type: '交通', price: '27.50', year: '2018', month:'2', day: '18' },
+      { id: 28, type: '吃饭', price: '28.20', year: '2018', month:'2', day: '18' },
+      { id: 29, type: '交通', price: '29.50', year: '2018', month:'2', day: '18' },
+      { id: 30, type: '衣服', price: '30.88', year: '2018', month:'2', day: '19' },
+      { id: 31, type: '交通', price: '31.20', year: '2018', month:'2', day: '19' },
+      { id: 32, type: '吃饭', price: '32.00', year: '2018', month:'2', day: '19' },
+      { id: 33, type: '交通', price: '33.50', year: '2018', month:'2', day: '19' },
+      { id: 34, type: '交通', price: '34.50', year: '2018', month:'2', day: '19' },
+      { id: 35, type: '交通', price: '35.50', year: '2018', month:'2', day: '20' },
+      { id: 36, type: '吃饭', price: '36.20', year: '2018', month:'2', day: '20' },
+      { id: 37, type: '交通', price: '37.50', year: '2018', month:'2', day: '20' },
+      { id: 38, type: '交通', price: '38.50', year: '2018', month:'2', day: '20' },
+      { id: 39, type: '交通', price: '39.50', year: '2018', month:'2', day: '20' },
+      { id: 40, type: '吃饭', price: '40.20', year: '2018', month:'2', day: '20' },
+    ],
+    items: []
+  },
+  numTap: function (event) {
+    if(!this.data.tapNew) return;
+    var curnum = event.currentTarget.dataset.num;
+    if(curnum == '+/-') {
+      this.pmTap();
+      return;
+    }
+    var inum = this.data.inputnum;
+    var havem = inum.indexOf('-') >= 0;
+    var havedot = inum.indexOf('.') >= 0;
+    var tempnum;
+    this.setData({ toView: '' });
+    this.setData({ toView: 'newitem' });
+    if(havem) {
+      inum = inum.slice(1);
+    }
+    if (curnum == '.') {
+      if (havedot) return;
+      tempnum = inum + '.';
+    } else {
+      if (havedot) {
+        var dotpos = inum.indexOf('.');
+        var length = inum.length;
+        if (length - dotpos >= 3) return;
+        tempnum = inum + curnum;
+      } else {
+        tempnum = (parseInt(inum) * 10 + parseInt(curnum)).toString();
+      }
+    }
+    if (tempnum.length > 9) {
+      wx.showToast({
+        title: 'huge money',
+        icon: 'none',
+        duration: 1000,
+        mask: true
+      });
+      return;
+    }
+    if (havem) {
+      tempnum = '-'+tempnum;
+    }
+    this.setData({ inputnum: tempnum });
+  },
+  clearTap: function () {
+    if (!this.data.tapNew) return;
+    this.setData({ inputnum: '0', inputdot: false });
+  },
+  confirmTap: function () {
+    var price = this.data.inputnum;
+    if (parseFloat(price) == 0) {
+      wx.showToast({
+        title: 'no money',
+        icon: 'none',
+        duration: 1000,
+        mask: true
+      });
+      return;
+    }
+    var tempitems = this.data.items;
+    var tempallitems = this.data.allItems;
+    var length = tempitems.length;
+    var newid = parseInt(tempitems[length - 1].id) + 1;
+    var tempposdown = this.data.posDown;
+    tempposdown++;
+    var tempitem = {
+      id: newid,
+      type: '未知',
+      price: parseFloat(price).toFixed(2).toString(),
+      year: this.data.year,
+      month: this.data.month,
+      day: this.data.day
+    }
+    tempitems.push(tempitem);
+    tempallitems.push(tempitem);
+    this.setData({ allItems: tempallitems, items: tempitems, inputnum: '0', toView: '', posDown: tempposdown });
+    this.setData({ toView: 'newitem' });
+  },
+  pmTap: function () {
+    if (!this.data.tapNew) return;
+    var inum = this.data.inputnum;
+    var tempnum;
+    if (inum.indexOf('-') < 0) {
+      tempnum = '-' + inum;
+    } else {
+      tempnum = inum.slice(1);
+    }
+    this.setData({ inputnum: tempnum });
+  },
+  newTap: function() {
+    var tempitems = this.data.allItems.slice(-20);
+    this.setData({ items: tempitems });
+    var tempposup = tempitems[0].id - 1;
+    var tempposdown = tempitems[tempitems.length - 1].id-1;
+    this.setData({ posUp: tempposup, posDown: tempposdown });
+    this.setData({tapNew: true,hidenew:'flex'});
+    this.setData({ toView: 'newitem'});
+  },
+  onLoad: function () {
+    var res = wx.getSystemInfoSync();
+    var contentHeight = res.windowHeight;
+    this.setData({ winHeight: contentHeight });
+    var tempitems = this.data.allItems.slice(-20);
+    this.setData({ items: tempitems});
+    var tempposup = tempitems[0].id - 1;
+    var tempposdown = tempitems[tempitems.length - 1].id - 1;
+    this.setData({ posUp: tempposup, posDown: tempposdown });
+    console.log('posUp:' + this.data.posUp + ',posDown:' + this.data.posDown);
+    this.setData({toView:'id'+tempposdown});
+    this.freshTotal(this.data.year);
+  },
+  freshTotal: function (year){
+    var totallastyearout = this.totalYearOut(year - 1);
+    var totalthisyearout = this.totalYearOut(year);
+    var totallastyearin = Math.abs(this.totalYearIn(year - 1));
+    var totalthisyearin = Math.abs(this.totalYearIn(year));
+    this.setData({lastyearout:totallastyearout,lastyearin:totallastyearin,thisyearout:totalthisyearout,thisyearin:totalthisyearin});
+  },
+  totalYearOut: function (year) {
+    var total = 0;
+    var tempitems = this.data.allItems;
+    var length = tempitems.length;
+    for (var i = 0; i < length; i++) {
+      if (tempitems[i].year != year) continue;
+      if (parseFloat(tempitems[i].price)>0) {
+        total = parseFloat(total) + parseFloat(tempitems[i].price);
+      }
+    }
+    return total.toFixed(2);
+  }, 
+  totalYearIn: function (year) {
+    var total = 0;
+    var tempitems = this.data.allItems;
+    var length = tempitems.length;
+    for (var i = 0; i < length; i++) {
+      if (tempitems[i].year != year) continue;
+      if (parseFloat(tempitems[i].price) < 0) {
+        total = parseFloat(total) + parseFloat(tempitems[i].price);
+      }
+    }
+    return total.toFixed(2);
+  },
+  upper: function () {
+    if (this.data.loadup) return;
+    console.log('posUp:' + this.data.posUp);
+    this.setData({ loadup: true });
+    var pos = this.data.posUp;
+    var range = 10;
+    var posup, posdown;
+    if (pos - range < 0) {
+      posup = 0;
+    } else {
+      posup = pos - range;
+    }
+    posdown = posup + range * 2;
+    var tempitems = this.data.allItems.slice(posup, posdown);
+    this.setData({ items: tempitems, posUp: posup, posDown: posdown });
+    var tempView = 'id' + parseInt(pos+1).toString();
+    this.setData({ toView: tempView });
+    setTimeout(function () {
+      this.setData({ loadup: false });
+    }.bind(this), 1500);
+  },
+  lower: function (event) {
+    if (this.data.loaddown) return;
+    console.log('posDown:' + this.data.posDown);
+    this.setData({ loaddown: true });
+    var pos = this.data.posDown;
+    var range = 10;
+    var posup, posdown;
+    var length = this.data.allItems.length;
+    if (pos + range > length) {
+      posdown = length;
+    } else {
+      posdown = pos + range;
+    }
+    posup = posdown - range * 2;
+    var tempitems = this.data.allItems.slice(posup, posdown);
+    this.setData({ items: tempitems, posUp: posup, posDown: posdown });
+    setTimeout(function () {
+      this.setData({ loaddown: false });
+    }.bind(this), 1500);
+  },
+})

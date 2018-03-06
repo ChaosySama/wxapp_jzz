@@ -1,0 +1,60 @@
+<!--index.wxml-->
+<view class='body' style='height:{{winHeight}}px'>
+  <view class="navi">
+    <view class='header'>
+      <view>我的账本</view>
+      <image src=''></image>
+      <button>报表</button>
+    </view>
+    <view class="total">
+      <view class="year">
+        <view class="date">{{year-1}}年</view>
+        <view class="in">支出:￥{{lastyearout}}</view>
+        <view class="out">收入:￥{{lastyearin}}</view>
+      </view>
+      <view class="year">
+        <view class="date">{{year}}年</view>
+        <view class="in">支出:￥{{thisyearout}}</view>
+        <view class="out">收入:￥{{thisyearin}}</view>
+      </view>
+    </view>
+  </view>
+  <scroll-view scroll-y="true" class="content" scroll-into-view='{{toView}}' upper-threshold='30' lower-threshold='30' bindscrolltoupper="upper" bindscrolltolower="lower">
+    <view class='detail'>
+      <view id="id{{item.id}}" wx:key="id" wx:for="{{items}}" wx:for-item="item" class="item">
+        <view class="type">{{item.type}}</view>
+        <view class="price">￥{{item.price}}</view>
+        <view class="date">{{item.day}}日</view>
+      </view>
+      <view style="display:{{hidenew}}" class="newitem" id='newitem'>
+        <view class="type">输入新增</view>
+        <view class="price">￥{{inputnum}}</view>
+        <view class="date">{{day}}日</view>
+      </view>
+    </view>
+  </scroll-view>
+  <view class='calculator'>
+    <view class='weui-grids numzone'>
+      <view wx:key="*this" wx:for="{{numzone}}" wx:for-item="number" class="weui-grid number" bindtap='numTap' data-num='{{number}}'>
+        <view class='weui-grid-label'>{{number}}</view>
+      </view>
+    </view>
+    <view class='weui-grids funczone'>
+      <view class='weui-grid func'>
+        <view class='weui-grid-label'>日期跳转</view>
+      </view>
+      <view class='weui-grid func'>
+        <view class='weui-grid-label'>分类筛选</view>
+      </view>
+      <view wx:if="{{tapNew}}" class='weui-grid func' bindtap='confirmTap'>
+        <view class='weui-grid-label'>确认</view>
+      </view>
+      <view wx:else class='weui-grid func' bindtap='newTap'>
+        <view class='weui-grid-label'>新增</view>
+      </view>
+      <view class='weui-grid func' bindtap='clearTap'>
+        <view class='weui-grid-label'>清空</view>
+      </view>
+    </view>
+  </view>
+</view>
