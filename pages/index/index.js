@@ -6,6 +6,7 @@ Page({
   data: {
     winHeight: 0,
     inputnum: '0',
+    range: 10,
     year: new Date().getFullYear(),
     month: new Date().getMonth()+1,
     day: new Date().getDate(),
@@ -15,6 +16,7 @@ Page({
     thisyearin: 0,
     toView: '',
     hidenew: 'none',
+    hidedelete: 'none',
     tapNew: false,
     posUp: 0,
     posDown: 0,
@@ -150,9 +152,9 @@ Page({
       id: newid,
       type: '未知',
       price: parseFloat(price).toFixed(2).toString(),
-      year: this.data.year,
-      month: this.data.month,
-      day: this.data.day
+      year: this.data.year.toString(),
+      month: this.data.month.toString(),
+      day: this.data.day.toString()
     }
     tempitems.push(tempitem);
     tempallitems.push(tempitem);
@@ -182,6 +184,7 @@ Page({
     if(tapNewflag){
       this.setData({ tapNew: false, hidenew: 'none' });
     }
+    this.setData({ hidedelete: 'none' });
   },
   newItem: function() {
     var tempitems = this.data.allItems.slice(-20);
@@ -195,9 +198,27 @@ Page({
       { label: '返回', method: 'toOrigin' }
     ];
     this.setData({ posUp: tempposup, posDown: tempposdown });
-    this.setData({ tapNew: true,hidenew:'flex'});
+    this.setData({ tapNew: true,hidenew:'flex',hidedelete:'none'});
     this.setData({ toView: 'newitem'});
     this.setData({ funcs: tempfuncs});
+  },
+  deleteItem: function() {
+    this.setData({ hidedelete: 'flex' });
+    var tempfuncs = this.data.funcs;
+    tempfuncs[3] = {label: '返回', method: 'toOrigin'};
+    this.setData({ funcs: tempfuncs });
+  },
+  deleteTap: function(event) {
+    var index = event.currentTarget.dataset.idx;
+    var posdown = this.data.posDown;
+    var range = this.data.range;
+    var pos = parseInt(posdown - (range * 2 - index));
+    //console.log(this.data.allItems[pos]);
+    var tempallitems = this.data.allItems;
+    var tempitems = this.data.items;
+    tempallitems.splice(pos,1);
+    tempitems.splice(index,1);
+    this.setData({allItems:tempallitems,items:tempitems});
   },
   onLoad: function () {
     var res = wx.getSystemInfoSync();
@@ -207,9 +228,10 @@ Page({
     this.setData({ items: tempitems});
     var tempposup = tempitems[0].id - 1;
     var tempposdown = tempitems[tempitems.length - 1].id - 1;
+    var range = this.data.range;
     this.setData({ posUp: tempposup, posDown: tempposdown });
     console.log('posUp:' + this.data.posUp + ',posDown:' + this.data.posDown);
-    this.setData({toView:'id'+tempposdown});
+    this.setData({toView:'id'+parseInt(range*2-1)});
     this.freshTotal(this.data.year);
   },
   freshTotal: function (year){
@@ -246,9 +268,15 @@ Page({
   upper: function () {
     if (this.data.loadup) return;
     console.log('posUp:' + this.data.posUp);
-    this.setData({ loadup: true });
     var pos = this.data.posUp;
-    var range = 10;
+    if(pos == 0) return;
+    var itemlength = this.data.allItems.length;
+    if(itemlength<19) {
+      this.lessItem();
+      return;
+    }
+    this.setData({ loadup: true });
+    var range = this.data.range;
     var posup, posdown;
     if (pos - range < 0) {
       posup = 0;
@@ -258,18 +286,28 @@ Page({
     posdown = posup + range * 2;
     var tempitems = this.data.allItems.slice(posup, posdown);
     this.setData({ items: tempitems, posUp: posup, posDown: posdown });
-    var tempView = 'id' + parseInt(pos+1).toString();
+    var tempView = 'id' + parseInt(range - 1).toString();
     this.setData({ toView: tempView });
     setTimeout(function () {
       this.setData({ loadup: false });
     }.bind(this), 1500);
   },
+  lessItem: function () {
+    var allitems = this.data.allItems;
+    var length = this.data.allItems.length;
+    this.setData({posUp: 0,posDown: length,items:allitems});
+  },
   lower: function (event) {
     if (this.data.loaddown) return;
-    console.log('posDown:' + this.data.posDown);
+    console.log('posUp:' + this.data.posUp+'posDown:' + this.data.posDown);
+    var itemlength = this.data.allItems.length;
+    if (itemlength < 19) {
+      this.lessItem();
+      return;
+    }
     this.setData({ loaddown: true });
     var pos = this.data.posDown;
-    var range = 10;
+    var range = this.data.range;
     var posup, posdown;
     var length = this.data.allItems.length;
     if (pos + range > length) {

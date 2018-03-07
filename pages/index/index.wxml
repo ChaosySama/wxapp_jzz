@@ -21,10 +21,15 @@
   </view>
   <scroll-view scroll-y="true" class="content" scroll-into-view='{{toView}}' upper-threshold='30' lower-threshold='30' bindscrolltoupper="upper" bindscrolltolower="lower">
     <view class='detail'>
-      <view id="id{{item.id}}" wx:key="id" wx:for="{{items}}" wx:for-item="item" class="item">
-        <view class="type">{{item.type}}</view>
-        <view class="price">￥{{item.price}}</view>
-        <view class="date">{{item.day}}日</view>
+      <view id="id{{index}}" wx:key="id" wx:for="{{items}}" wx:for-item="item" wx:for-index="index">
+        <view style="display:flex">
+          <image src="../image/remove.png" style="display:{{hidedelete}}" class="deleteitem" bindtap="deleteTap" data-idx="{{index}}"></image>
+          <view class="item">
+            <view class="type">{{item.type}}</view>
+            <view class="price">￥{{item.price}}</view>
+            <view class="date">{{item.day}}日</view>
+          </view>
+        </view>
       </view>
       <view style="display:{{hidenew}}" class="newitem" id='newitem'>
         <view class="type">输入新增</view>
