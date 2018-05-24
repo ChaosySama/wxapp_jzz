@@ -197,3 +197,7 @@
 .func {
   font-size: 30rpx;
 }
+
+.cata {
+  font-size: 40rpx;
+}

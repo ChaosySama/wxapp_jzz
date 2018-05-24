@@ -38,14 +38,26 @@
       </view>
     </view>
   </scroll-view>
-  <view class='calculator'>
+  <view style="display:{{catagory?'none' : 'flex'}};" class='calculator'>
     <view class='weui-grids numzone'>
       <view wx:key="*this" wx:for="{{numzone}}" wx:for-item="number" class="weui-grid number" bindtap='numTap' data-num='{{number}}'>
         <view class='weui-grid-label'>{{number}}</view>
       </view>
     </view>
     <view class='weui-grids funczone'>
-      <view wx:key="*this" wx:for="{{funcs}}" wx:for-item="func" class='weui-grid func' bindtap="{{func.method}}">
+      <view wx:key="*this" wx:for="{{funcs}}" wx:for-item="func" class='weui-grid func' style="border-color:{{func.label?'grey' : 'white'}}" bindtap="{{func.method}}">
+        <view class='weui-grid-label'>{{func.label}}</view>
+      </view>
+    </view>
+  </view>
+  <view style="display:{{catagory?'flex' : 'none'}};" class='calculator'>
+    <view class='weui-grids numzone'>
+      <view wx:key="*this" wx:for="{{catazone}}" wx:for-item="cata" wx:for-index="idx" class="weui-grid cata" style='background-color:{{cata.color?"#f66" : "white"}}' bindtap='cataTap' data-cata='{{cata.cata}}' data-idx='{{idx}}'>
+        <view class='weui-grid-label'>{{cata.cata}}</view>
+      </view>
+    </view>
+    <view class='weui-grids funczone'>
+      <view wx:key="*this" wx:for="{{catafuncs}}" wx:for-item="func" class='weui-grid func' style="border-color:{{func.label?'grey' : 'white'}}" bindtap="{{func.method}}">
         <view class='weui-grid-label'>{{func.label}}</view>
       </view>
     </view>
