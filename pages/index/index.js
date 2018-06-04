@@ -11,10 +11,8 @@ Page({
     year: new Date().getFullYear(),
     month: new Date().getMonth() + 1,
     day: new Date().getDate(),
-    lastyearout: 0,
-    lastyearin: 0,
-    thisyearout: 0,
-    thisyearin: 0,
+    totalout: 0,
+    totalin: 0,
     toView: '',
     hidenew: 'none',
     hidedelete: 'none',
@@ -24,7 +22,9 @@ Page({
     loadup: false,
     loaddown: false,
     numzone: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '+/-', '0', '.'],
+    allcata: [],
     catazone: [],
+    catapage: 0,
     itemsBack: [],
     allItems: [
       { id: 1, type: '交通', price: '1.50', year: '2017', month: '2', day: '17' },
@@ -54,18 +54,18 @@ Page({
       { id: 25, type: '交通', price: '25.50', year: '2018', month: '2', day: '18' },
       { id: 26, type: '交通', price: '26.50', year: '2018', month: '2', day: '18' },
       { id: 27, type: '交通', price: '27.50', year: '2018', month: '2', day: '18' },
-      { id: 28, type: '吃饭', price: '28.20', year: '2018', month: '2', day: '18' },
-      { id: 29, type: '交通', price: '29.50', year: '2018', month: '2', day: '18' },
+      { id: 28, type: '吃饭2', price: '28.20', year: '2018', month: '2', day: '18' },
+      { id: 29, type: '交通9', price: '29.50', year: '2018', month: '2', day: '18' },
       { id: 30, type: '衣服', price: '30.88', year: '2018', month: '2', day: '19' },
-      { id: 31, type: '交通', price: '31.20', year: '2018', month: '2', day: '19' },
-      { id: 32, type: '吃饭', price: '32.00', year: '2018', month: '2', day: '19' },
-      { id: 33, type: '交通', price: '33.50', year: '2018', month: '2', day: '19' },
-      { id: 34, type: '交通', price: '34.50', year: '2018', month: '2', day: '19' },
-      { id: 35, type: '交通', price: '35.50', year: '2018', month: '2', day: '20' },
-      { id: 36, type: '吃饭', price: '36.20', year: '2018', month: '2', day: '20' },
-      { id: 37, type: '交通', price: '37.50', year: '2018', month: '2', day: '20' },
-      { id: 38, type: '交通', price: '38.50', year: '2018', month: '2', day: '20' },
-      { id: 39, type: '交通', price: '39.50', year: '2018', month: '2', day: '20' },
+      { id: 31, type: '交通0', price: '31.20', year: '2018', month: '2', day: '19' },
+      { id: 32, type: '吃饭0', price: '32.00', year: '2018', month: '2', day: '19' },
+      { id: 33, type: '交通1', price: '33.50', year: '2018', month: '2', day: '19' },
+      { id: 34, type: '交通2', price: '34.50', year: '2018', month: '2', day: '19' },
+      { id: 35, type: '交通3', price: '35.50', year: '2018', month: '2', day: '20' },
+      { id: 36, type: '吃饭4', price: '36.20', year: '2018', month: '2', day: '20' },
+      { id: 37, type: '交通5', price: '37.50', year: '2018', month: '2', day: '20' },
+      { id: 38, type: '交通6', price: '38.50', year: '2018', month: '2', day: '20' },
+      { id: 39, type: '交通7', price: '39.50', year: '2018', month: '2', day: '20' },
       { id: 40, type: '吃饭', price: '40.20', year: '2018', month: '2', day: '20' },
     ],
     items: [],
@@ -82,27 +82,72 @@ Page({
       { label: '返回', method: 'leaveCata' }
     ]
   },
-  loadCata: function (items){
+  loadCata: function (){
+    var items = this.data.itemsBack;
     var hash = {}, result = [], item;
-    for (var i = 0; i < items.length; i++) {
+    var acata = this.data.allcata;
+    var sepnum = 12;
+    for (var i = 0, ilen = acata.length; i < ilen; i++) {
+      item = acata[i];
+      hash[item.cata] = true;
+      result.push(item);
+    }
+    for (var i = 0, ilen = items.length; i < ilen; i++) {
       item = items[i];
       if (!hash[item.type]) {
         hash[item.type] = true;
-        result.push({cata:item.type, color:0});
+        result.unshift({cata:item.type, color:0});
       }
     }
-    this.setData({ catazone: result});
+    this.setData({ allcata: result });
+    var page = this.data.catapage;
+    var num = result.length;
+    var tempcata = [];
+    for (var i = sepnum * page, j = sepnum*(page+1);i<j && i<num;i++) {
+      tempcata.push(result[i]);
+    }
+    this.setData({ catazone: tempcata });
+    var totalpage = Math.ceil(result.length / sepnum)-1;
+    var tempcatafunc = this.data.catafuncs;
+    if(totalpage > 0 && page < totalpage) {
+      tempcatafunc[1] = { label: '下一页', method: 'nextCata' };
+    } else {
+      tempcatafunc[1] = { label: '', method: '' };
+    }
+    if (page > 0 && page <= totalpage) {
+      tempcatafunc[0] = { label: '上一页', method: 'lastCata' };
+    } else {
+      tempcatafunc[0] = { label: '', method: '' };
+    } 
+    this.setData({ catafuncs: tempcatafunc});
+    console.log(this.data.catazone);
+  },
+  lastCata: function (){
+    var page = this.data.catapage;
+    page = parseInt(page) - 1;
+    this.setData({catapage:page});
+    this.loadCata();
+  },
+  nextCata: function () {
+    var page = this.data.catapage;
+    page = parseInt(page) + 1;
+    this.setData({ catapage: page });
+    this.loadCata();
   },
   cataTap: function (event) {
     var cata = event.currentTarget.dataset.cata;
     var idx = event.currentTarget.dataset.idx;
-    var tempcata = this.data.catazone;
+    var tempcata = this.data.allcata;
+    var tempcatazone = this.data.catazone;
     var allitems = this.data.itemsBack;
     var cataitems = [];
     for(var i=0; i<tempcata.length; i++){
       tempcata[i].color=(i==idx?1:0);
     }
-    this.setData({catazone : tempcata});
+    for (var i = 0; i < tempcatazone.length; i++) {
+      tempcatazone[i].color = (i == idx ? 1 : 0);
+    }
+    this.setData({allcata : tempcata, catazone:tempcatazone});
     for (var i = 0; i < allitems.length; i++) {
       if(allitems[i].type == cata){
         cataitems.push(allitems[i]);
@@ -110,16 +155,22 @@ Page({
     }
     this.setData({ allItems: cataitems });
     this.freshItem();
+    this.freshTotal();
   },
   resetCata: function () {
-    var tempcata = this.data.catazone;
+    var tempcata = this.data.allcata;
+    var tempcatazone = this.data.catazone;
     for (var i = 0; i < tempcata.length; i++) {
       tempcata[i].color = 0;
     }
-    this.setData({ catazone: tempcata });
+    for (var i = 0; i < tempcatazone.length; i++) {
+      tempcatazone[i].color = 0;
+    }
+    this.setData({ allcata: tempcata , catazone:tempcatazone});
     var itemsback = this.data.itemsBack;
     this.setData({ allItems: itemsback });
     this.freshItem();
+    this.freshTotal();
   },
   freshItem: function () {
     var range = this.data.range;
@@ -218,7 +269,7 @@ Page({
     backitems.push(tempitem);
     this.setData({ allItems: tempallitems, items: tempitems, itemsBack:backitems, inputnum: '0', toView: '', posDown: tempposdown });
     this.setData({ toView: 'newitem' });
-    this.freshTotal(this.data.year);
+    this.freshTotal();
   },
   pmTap: function () {
     if (!this.data.tapNew) return;
@@ -232,6 +283,7 @@ Page({
     this.setData({ inputnum: tempnum });
   },
   typeSelect: function () {
+    this.loadCata();
     this.setData({ catagory: true });
   },
   leaveCata: function () {
@@ -294,7 +346,7 @@ Page({
           //tempallitems.splice(pos, 1);
           //tempitems.splice(index, 1);
           that.setData({ allItems: tempallitems, items: tempitems, itemsBack:backitems});
-          that.freshTotal(that.data.year);
+          that.freshTotal();
         } else if (res.cancel) {
           return
         }
@@ -319,59 +371,28 @@ Page({
     this.setData({ itemsBack: allitems});
     var range = this.data.range;
     this.setData({ toView: 'id' + parseInt(range * 2 - 1) });
-    this.freshTotal(this.data.year);
-    this.loadCata(this.data.allItems);
+    this.freshTotal();
   },
-  freshTotal: function (year) {
-    var totallastyearout = this.totalYearOut(year - 1);
-    var totalthisyearout = this.totalYearOut(year);
-    var totallastyearin = Math.abs(this.totalYearIn(year - 1));
-    var totalthisyearin = Math.abs(this.totalYearIn(year));
-    this.setData({ lastyearout: totallastyearout, lastyearin: totallastyearin, thisyearout: totalthisyearout, thisyearin: totalthisyearin });
+  freshTotal: function () {
+    var totalout = Math.abs(this.totalOut());
+    var totalin = Math.abs(this.totalIn());
+    this.setData({ totalout: totalout, totalin: totalin });
   },
-  totalYearOut: function (year) {
+  totalOut: function () {
     var total = 0;
     var tempitems = this.data.allItems;
-    var length = tempitems.length;
-    for (var i = 0; i < length; i++) {
-      if (tempitems[i].year != year) continue;
-      if (parseFloat(tempitems[i].price) > 0) {
-        total = parseFloat(total) + parseFloat(tempitems[i].price);
-      }
-    }
-    return total.toFixed(2);
-  },
-  totalYearIn: function (year) {
-    var total = 0;
-    var tempitems = this.data.allItems;
-    var length = tempitems.length;
-    for (var i = 0; i < length; i++) {
-      if (tempitems[i].year != year) continue;
+    for (var i = 0, ilen = tempitems.length; i < ilen; i++) {
       if (parseFloat(tempitems[i].price) < 0) {
         total = parseFloat(total) + parseFloat(tempitems[i].price);
       }
     }
     return total.toFixed(2);
   },
-  totalMonthOut: function (year, month) {
+  totalIn: function (year) {
     var total = 0;
     var tempitems = this.data.allItems;
-    var length = tempitems.length;
-    for (var i = 0; i < length; i++) {
-      if (tempitems[i].year != year || tempitems[i].month != month) continue;
+    for (var i = 0, ilen = tempitems.length; i < ilen; i++) {
       if (parseFloat(tempitems[i].price) > 0) {
-        total = parseFloat(total) + parseFloat(tempitems[i].price);
-      }
-    }
-    return total.toFixed(2);
-  },
-  totalMonthIn: function (year, month) {
-    var total = 0;
-    var tempitems = this.data.allItems;
-    var length = tempitems.length;
-    for (var i = 0; i < length; i++) {
-      if (tempitems[i].year != year || tempitems[i].month != month) continue;
-      if (parseFloat(tempitems[i].price) < 0) {
         total = parseFloat(total) + parseFloat(tempitems[i].price);
       }
     }

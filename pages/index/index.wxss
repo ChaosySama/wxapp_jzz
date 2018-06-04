@@ -47,30 +47,21 @@
 
 .total {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  justify-content: space-between;
+  font-size: 30rpx;
   border: none;
   border-bottom: 2rpx solid grey;
   margin: 0 3%;
   padding: 10rpx 3%;
 }
 
-.total .year {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  font-size: 30rpx;
+.total .in {
+  width: 40%;
 }
 
-.year .date {
-  width: 18%;
-}
-
-.year .in {
-  width: 50%;
-}
-
-.year .out {
-  width: 35%;
+.total .out {
+  width: 40%;
 }
 
 .content {
@@ -179,7 +170,7 @@
   line-height:15%;
   width: 96%;
   text-align: center;
-  margin: 2.3% 2%;
+  margin: 2.3%;
   border: 2rpx grey solid;
   border-radius: 15rpx;
 }
@@ -199,5 +190,5 @@
 }
 
 .cata {
-  font-size: 40rpx;
+  font-size: 30rpx;
 }
