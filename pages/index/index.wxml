@@ -23,7 +23,7 @@
     <view class='detail'>
       <view id="id{{index}}" wx:key="id" wx:for="{{items}}" wx:for-item="item" wx:for-index="index">
         <view style="display:flex">
-          <image src="../image/remove.png" style="display:{{hidedelete}}" class="deleteitem" bindtap="deleteTap" data-idx="{{index}}"></image>
+          <image src="../image/remove.png" style="display:{{hidedelete}}" class="deleteitem" bindtap="deleteTap" data-idx="{{index}}" data-id="{{item.id}}"></image>
           <view class="item">
             <view class="type">{{item.type}}</view>
             <view class="price">￥{{item.price}}</view>

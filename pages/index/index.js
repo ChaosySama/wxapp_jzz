@@ -200,6 +200,7 @@ Page({
     }
     var tempitems = this.data.items;
     var tempallitems = this.data.allItems;
+    var backitems = this.data.itemsBack;
     var length = tempitems.length;
     var newid = parseInt(tempitems[length - 1].id) + 1;
     var tempposdown = this.data.posDown;
@@ -214,7 +215,8 @@ Page({
     }
     tempitems.push(tempitem);
     tempallitems.push(tempitem);
-    this.setData({ allItems: tempallitems, items: tempitems, inputnum: '0', toView: '', posDown: tempposdown });
+    backitems.push(tempitem);
+    this.setData({ allItems: tempallitems, items: tempitems, itemsBack:backitems, inputnum: '0', toView: '', posDown: tempposdown });
     this.setData({ toView: 'newitem' });
     this.freshTotal(this.data.year);
   },
@@ -274,25 +276,39 @@ Page({
   deleteTap: function (event) {
     var that = this;
     var index = event.currentTarget.dataset.idx;
+    var id = event.currentTarget.dataset.id;
     wx.showModal({
       title: '',
       content: '确认删除此条记录？',
       success: function (res) {
         if (res.confirm) {
-          var posdown = that.data.posDown;
-          var range = that.data.range;
-          var pos = parseInt(posdown - (range * 2 - index));
+          // var posdown = that.data.posDown;
+          // var range = that.data.range;
+          // var pos = parseInt(posdown - (range * 2 - index));
           var tempallitems = that.data.allItems;
           var tempitems = that.data.items;
-          tempallitems.splice(pos, 1);
-          tempitems.splice(index, 1);
-          that.setData({ allItems: tempallitems, items: tempitems });
+          var backitems = that.data.itemsBack;
+          tempallitems = that.deleteOne(tempallitems, id);
+          tempitems = that.deleteOne(tempitems, id);
+          backitems = that.deleteOne(backitems, id);
+          //tempallitems.splice(pos, 1);
+          //tempitems.splice(index, 1);
+          that.setData({ allItems: tempallitems, items: tempitems, itemsBack:backitems});
           that.freshTotal(that.data.year);
         } else if (res.cancel) {
           return
         }
       }
     });
+  },
+  deleteOne: function(items,id){
+    for(var i=0, alen=items.length;i<alen;i++){
+      if(items[i].id==id) {
+        items.splice(i,1);
+        break;
+      }
+    }
+    return items;
   },
   onLoad: function () {
     var res = wx.getSystemInfoSync();
