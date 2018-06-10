@@ -24,6 +24,7 @@ Page({
     numzone: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '+/-', '0', '.'],
     allcata: [],
     catazone: [],
+    selectcata: '',
     catapage: 0,
     itemsBack: [],
     allItems: [
@@ -120,7 +121,6 @@ Page({
       tempcatafunc[0] = { label: '', method: '' };
     } 
     this.setData({ catafuncs: tempcatafunc});
-    console.log(this.data.catazone);
   },
   lastCata: function (){
     var page = this.data.catapage;
@@ -137,17 +137,25 @@ Page({
   cataTap: function (event) {
     var cata = event.currentTarget.dataset.cata;
     var idx = event.currentTarget.dataset.idx;
+    var allitems = this.data.itemsBack;
     var tempcata = this.data.allcata;
     var tempcatazone = this.data.catazone;
-    var allitems = this.data.itemsBack;
     var cataitems = [];
-    for(var i=0; i<tempcata.length; i++){
-      tempcata[i].color=(i==idx?1:0);
+    this.setData({selectcata:cata});
+    var selectc = this.data.selectcata;
+    for(var i = 0; i < tempcata.length;i++){
+      tempcata[i].color = 0;
+      if(tempcata[i].cata == selectc){
+        tempcata[i].color = 1;
+      }
     }
     for (var i = 0; i < tempcatazone.length; i++) {
-      tempcatazone[i].color = (i == idx ? 1 : 0);
+      tempcatazone[i].color = 0;
+      if (tempcatazone[i].cata == selectc) {
+        tempcatazone[i].color = 1;
+      }
     }
-    this.setData({allcata : tempcata, catazone:tempcatazone});
+    this.setData({ allcata:tempcata, catazone:tempcatazone });
     for (var i = 0; i < allitems.length; i++) {
       if(allitems[i].type == cata){
         cataitems.push(allitems[i]);
@@ -160,13 +168,20 @@ Page({
   resetCata: function () {
     var tempcata = this.data.allcata;
     var tempcatazone = this.data.catazone;
+    var selectc = this.data.selectcata;
     for (var i = 0; i < tempcata.length; i++) {
-      tempcata[i].color = 0;
+      if(selectc == tempcata[i].cata) {
+        tempcata[i].color = 0;
+        break;
+      }
     }
     for (var i = 0; i < tempcatazone.length; i++) {
-      tempcatazone[i].color = 0;
+      if (selectc == tempcatazone[i].cata) {
+        tempcatazone[i].color = 0;
+        break;
+      }
     }
-    this.setData({ allcata: tempcata , catazone:tempcatazone});
+    this.setData({ allcata: tempcata , catazone:tempcatazone, selectcata:''});
     var itemsback = this.data.itemsBack;
     this.setData({ allItems: itemsback });
     this.freshItem();
