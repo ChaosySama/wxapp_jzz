@@ -13,13 +13,14 @@
   </view>
   <scroll-view scroll-y="true" class="content" scroll-into-view='{{toView}}' upper-threshold='30' lower-threshold='30' bindscrolltoupper="upper" bindscrolltolower="lower">
     <view class='detail'>
+      <view class="first" hidden="{{hidefirst}}">已到最前</view>
       <view id="id{{index}}" wx:key="id" wx:for="{{items}}" wx:for-item="item" wx:for-index="index">
         <view style="display:flex">
           <image src="../image/remove.png" style="display:{{hidedelete}}" class="deleteitem" bindtap="deleteTap" data-idx="{{index}}" data-id="{{item.id}}"></image>
           <view class="item">
             <view class="type">{{item.type}}</view>
             <view class="price">￥{{item.price}}</view>
-            <view class="date">{{item.day}}日</view>
+            <view class="date" bindtap='dateTap' data-id='{{item.id}}'>{{dateshow[item.id-1]}}</view>
           </view>
         </view>
       </view>
@@ -28,6 +29,7 @@
         <view class="price">￥{{inputnum}}</view>
         <view class="date">{{day}}日</view>
       </view>
+      <view class="last" hidden="{{hidelast}}">已到最后</view>
     </view>
   </scroll-view>
   <view style="display:{{catagory?'none' : 'flex'}};" class='calculator'>

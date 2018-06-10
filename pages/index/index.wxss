@@ -192,3 +192,25 @@
 .cata {
   font-size: 30rpx;
 }
+
+.first {
+  color:grey;
+  font-size: 30rpx;
+  margin: 0 auto;
+  width: 60%;
+  text-align: center;
+  padding-bottom: 5rpx;
+  margin-bottom: 10rpx;
+  border-bottom: 1rpx solid grey;
+}
+
+.last {
+  color:grey;
+  font-size: 30rpx;
+  margin: 0 auto;
+  width: 60%;
+  text-align: center;
+  padding-top: 10rpx;
+  margin-top: 20rpx;
+  border-top: 1rpx solid grey;
+}
