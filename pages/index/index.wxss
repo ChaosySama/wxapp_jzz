@@ -130,7 +130,7 @@
 
 
 .calculator {
-  z-index: 99;
+  z-index: 10;
   width: 92%;
   position: relative;
   left: 4%;

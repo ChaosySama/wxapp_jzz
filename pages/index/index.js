@@ -9,6 +9,8 @@ Page({
     inputnum: '-0',
     range: 10,
     date: '',
+    datestart: '',
+    inorout: '支出',
     totalout: 0,
     totalin: 0,
     toView: '',
@@ -25,54 +27,55 @@ Page({
     allcata: [],
     catazone: [],
     selectcata: '',
+    selectdate: '',
     catapage: 0,
     itemsBack: [],
     dateshow:[],
     allItems: [
-      { id: 1, type: '交通', price: '1.50', date: '2017-2-11'},
-      { id: 2, type: '衣服', price: '-2.88', date: '2017-2-17' },
-      { id: 3, type: '交通', price: '3.20', date: '2017-2-17' },
-      { id: 4, type: '吃饭', price: '4.00', date: '2017-2-17' },
-      { id: 5, type: '交通', price: '5.50', date: '2017-2-17' },
-      { id: 6, type: '交通', price: '6.50', date: '2017-2-17' },
-      { id: 7, type: '交通', price: '7.50', date: '2017-2-17' },
-      { id: 8, type: '吃饭', price: '8.20', date: '2017-2-18' },
-      { id: 9, type: '交通', price: '9.50', date: '2017-2-18' },
-      { id: 10, type: '衣服', price: '10.88', date: '2017-2-18' },
-      { id: 11, type: '交通', price: '11.20', date: '2017-2-18' },
-      { id: 12, type: '吃饭', price: '12.00', date: '2017-2-18' },
-      { id: 13, type: '交通', price: '13.50', date: '2017-2-18' },
-      { id: 14, type: '交通', price: '14.50', date: '2017-2-18' },
-      { id: 15, type: '交通', price: '15.50', date: '2017-2-18' },
-      { id: 16, type: '吃饭', price: '16.20', date: '2017-2-19' },
-      { id: 17, type: '交通', price: '17.50', date: '2017-2-19' },
-      { id: 18, type: '交通', price: '18.50', date: '2017-2-19' },
-      { id: 19, type: '交通', price: '19.50', date: '2017-2-19' },
-      { id: 20, type: '吃饭', price: '20.20', date: '2017-2-19' },
-      { id: 21, type: '交通', price: '2111111.50', date: '2017-2-20' },
-      { id: 22, type: '衣服', price: '22222.88', date: '2017-2-20' },
-      { id: 23, type: '交通', price: '23.20', date: '2017-2-20' },
-      { id: 24, type: '吃饭', price: '24.00', date: '2017-2-20' },
-      { id: 25, type: '交通', price: '25.50', date: '2017-2-20' },
-      { id: 26, type: '交通', price: '26.50', date: '2017-2-20' },
-      { id: 27, type: '交通', price: '27.50', date: '2017-2-20' },
-      { id: 28, type: '吃饭2', price: '28.20', date: '2017-2-22' },
-      { id: 29, type: '交通9', price: '29.50', date: '2017-2-22' },
-      { id: 30, type: '衣服', price: '30.88', date: '2017-2-22' },
-      { id: 31, type: '交通0', price: '31.20', date: '2017-2-22' },
-      { id: 32, type: '吃饭0', price: '32.00', date: '2017-2-22' },
-      { id: 33, type: '交通1', price: '33.50', date: '2017-2-22' },
-      { id: 34, type: '交通2', price: '34.50', date: '2017-2-22' },
-      { id: 35, type: '交通3', price: '35.50', date: '2017-2-22' },
-      { id: 36, type: '吃饭4', price: '36.20', date: '2017-2-22' },
-      { id: 37, type: '交通5', price: '37.50', date: '2017-2-22' },
-      { id: 38, type: '交通6', price: '38.50', date: '2017-2-22' },
-      { id: 39, type: '交通7', price: '39.50', date: '2017-2-23' },
-      { id: 40, type: '吃饭', price: '40.20', date: '2017-2-24' },
+      { id: 1, type: '交通', price: '1.50', date: '2017-02-11'},
+      { id: 2, type: '衣服', price: '-2.88', date: '2017-02-17' },
+      { id: 3, type: '交通', price: '3.20', date: '2017-02-17' },
+      { id: 4, type: '吃饭', price: '4.00', date: '2017-02-17' },
+      { id: 5, type: '交通', price: '5.50', date: '2017-02-17' },
+      { id: 6, type: '交通', price: '6.50', date: '2017-02-17' },
+      { id: 7, type: '交通', price: '7.50', date: '2017-02-17' },
+      { id: 8, type: '吃饭', price: '8.20', date: '2017-02-18' },
+      { id: 9, type: '交通', price: '9.50', date: '2017-02-18' },
+      { id: 10, type: '衣服', price: '10.88', date: '2017-02-18' },
+      { id: 11, type: '交通', price: '11.20', date: '2017-02-18' },
+      { id: 12, type: '吃饭', price: '12.00', date: '2017-02-18' },
+      { id: 13, type: '交通', price: '13.50', date: '2017-02-18' },
+      { id: 14, type: '交通', price: '14.50', date: '2017-02-18' },
+      { id: 15, type: '交通', price: '15.50', date: '2017-02-18' },
+      { id: 16, type: '吃饭', price: '16.20', date: '2017-02-19' },
+      { id: 17, type: '交通', price: '17.50', date: '2017-02-19' },
+      { id: 18, type: '交通', price: '18.50', date: '2017-02-19' },
+      { id: 19, type: '交通', price: '19.50', date: '2017-02-19' },
+      { id: 20, type: '吃饭', price: '20.20', date: '2017-02-19' },
+      { id: 21, type: '交通', price: '2111111.50', date: '2017-02-20' },
+      { id: 22, type: '衣服', price: '22222.88', date: '2017-02-20' },
+      { id: 23, type: '交通', price: '23.20', date: '2017-02-20' },
+      { id: 24, type: '吃饭', price: '24.00', date: '2017-02-20' },
+      { id: 25, type: '交通', price: '25.50', date: '2017-02-20' },
+      { id: 26, type: '交通', price: '26.50', date: '2017-02-20' },
+      { id: 27, type: '交通', price: '27.50', date: '2017-02-20' },
+      { id: 28, type: '吃饭2', price: '28.20', date: '2017-02-22' },
+      { id: 29, type: '交通9', price: '29.50', date: '2017-02-22' },
+      { id: 30, type: '衣服', price: '30.88', date: '2017-02-22' },
+      { id: 31, type: '交通0', price: '31.20', date: '2017-02-22' },
+      { id: 32, type: '吃饭0', price: '32.00', date: '2017-02-22' },
+      { id: 33, type: '交通1', price: '33.50', date: '2017-02-22' },
+      { id: 34, type: '交通2', price: '34.50', date: '2017-02-22' },
+      { id: 35, type: '交通3', price: '35.50', date: '2017-02-22' },
+      { id: 36, type: '吃饭4', price: '36.20', date: '2017-02-22' },
+      { id: 37, type: '交通5', price: '37.50', date: '2017-02-22' },
+      { id: 38, type: '交通6', price: '38.50', date: '2017-02-22' },
+      { id: 39, type: '交通7', price: '39.50', date: '2017-02-23' },
+      { id: 40, type: '吃饭', price: '40.20', date: '2017-02-24' },
     ],
     items: [],
     funcs: [
-      { label: '日期跳转', method: 'toDate' },
+      { label: '日期跳转', method: '' },
       { label: '分类筛选', method: 'typeSelect' },
       { label: '新增', method: 'newItem' },
       { label: '删除', method: 'deleteItem' }
@@ -89,24 +92,32 @@ Page({
         month = new Date().getMonth() + 1,
         day = new Date().getDate(),
         str ='';
+    if(month<10){
+      month = '0'+month;
+    }
     str = year+'-'+month+'-'+day;
     return str;
   },
   loadCata: function (){
-    var items = this.data.itemsBack;
-    var hash = {}, result = [], item;
-    var acata = this.data.allcata;
-    var sepnum = 12;
-    for (var i = 0, ilen = acata.length; i < ilen; i++) {
-      item = acata[i];
-      hash[item.cata] = true;
-      result.push(item);
+    var selectdate = this.data.selectdate;
+    var items;
+    if(selectdate==''){
+      items = this.data.itemsBack;
+    }else {
+      items = this.data.allItems;
     }
+    var hash = {}, result = [], item;
+    var selectcata = this.data.selectcata;
+    var sepnum = 12;
     for (var i = 0, ilen = items.length; i < ilen; i++) {
       item = items[i];
       if (!hash[item.type]) {
         hash[item.type] = true;
-        result.unshift({cata:item.type, color:0});
+        if(item.type != selectcata){
+          result.unshift({cata:item.type, color:0});
+        }else{
+          result.unshift({ cata: item.type, color: 1 });
+        }
       }
     }
     this.setData({ allcata: result });
@@ -146,38 +157,59 @@ Page({
   cataTap: function (event) {
     var cata = event.currentTarget.dataset.cata;
     var idx = event.currentTarget.dataset.idx;
+    var selectdate = this.data.selectdate;
+    var flag = false;
     var allitems = this.data.itemsBack;
     var tempcata = this.data.allcata;
     var tempcatazone = this.data.catazone;
     var cataitems = [];
-    this.setData({selectcata:cata});
-    var selectc = this.data.selectcata;
-    for(var i = 0; i < tempcata.length;i++){
-      tempcata[i].color = 0;
-      if(tempcata[i].cata == selectc){
-        tempcata[i].color = 1;
-      }
-    }
-    for (var i = 0; i < tempcatazone.length; i++) {
-      tempcatazone[i].color = 0;
-      if (tempcatazone[i].cata == selectc) {
-        tempcatazone[i].color = 1;
-      }
-    }
-    this.setData({ allcata:tempcata, catazone:tempcatazone });
     for (var i = 0; i < allitems.length; i++) {
-      if(allitems[i].type == cata){
-        cataitems.push(allitems[i]);
+      if(selectdate==''){
+        if (allitems[i].type == cata) {
+          flag = true;
+          cataitems.push(allitems[i]);
+        }
+      }else {
+        if (allitems[i].type == cata && allitems[i].date == selectdate) {
+          flag = true;
+          cataitems.push(allitems[i]);
+        }
       }
     }
-    this.setData({ allItems: cataitems });
-    this.freshItem();
-    this.freshTotal();
+    if(flag){
+      this.setData({ selectcata: cata });
+      for (var i = 0; i < tempcata.length; i++) {
+        tempcata[i].color = 0;
+        if (tempcata[i].cata == cata) {
+          tempcata[i].color = 1;
+        }
+      }
+      for (var i = 0; i < tempcatazone.length; i++) {
+        tempcatazone[i].color = 0;
+        if (tempcatazone[i].cata == cata) {
+          tempcatazone[i].color = 1;
+        }
+      }
+      this.setData({ allcata: tempcata, catazone: tempcatazone });
+      this.setData({ allItems: cataitems });
+      this.freshItem();
+      this.freshTotal();
+    }else {
+      wx.showToast({
+        title: '该分类下没有数据',
+        icon: 'none',
+        duration: 1500,
+        mask: true
+      });
+    }
+    
   },
   resetCata: function () {
     var tempcata = this.data.allcata;
     var tempcatazone = this.data.catazone;
     var selectc = this.data.selectcata;
+    var selectdate = this.data.selectdate;
+    var itemsback=[];
     for (var i = 0; i < tempcata.length; i++) {
       if(selectc == tempcata[i].cata) {
         tempcata[i].color = 0;
@@ -191,7 +223,16 @@ Page({
       }
     }
     this.setData({ allcata: tempcata , catazone:tempcatazone, selectcata:''});
-    var itemsback = this.data.itemsBack;
+    if(selectdate==''){
+      itemsback = this.data.itemsBack;
+    }else {
+      var tempall = this.data.itemsBack;
+      for(var i=0;i<tempall.length;i++){
+        if (tempall[i].date == selectdate) {
+          itemsback.push(tempall[i]);
+        }
+      }
+    }
     this.setData({ allItems: itemsback });
     this.freshItem();
     this.freshTotal();
@@ -235,7 +276,7 @@ Page({
     }
     if (tempnum.length > 9) {
       wx.showToast({
-        title: 'huge money',
+        title: '金额数量过大',
         icon: 'none',
         duration: 1000,
         mask: true
@@ -250,21 +291,23 @@ Page({
   redoNumber: function () {
     if (!this.data.tapNew) return;
     var tempinum = this.data.inputnum;
+    var tempinorout = this.data.inorout;
     tempinum = tempinum.substring(0, tempinum.length - 1);
     if (tempinum == '-' || tempinum == '') {
       tempinum = '-0';
+      tempinorout = '支出';
     }
-    this.setData({ inputnum: tempinum });
+    this.setData({ inputnum: tempinum, inorout:tempinorout });
   },
   clearNumber: function () {
     if (!this.data.tapNew) return;
-    this.setData({ inputnum: '-0', inputdot: false });
+    this.setData({ inputnum: '-0', inputdot: false, inorout: '支出' });
   },
   confirmNumber: function () {
     var price = this.data.inputnum;
     if (parseFloat(price) == 0) {
       wx.showToast({
-        title: 'no money',
+        title: '没有输入金额',
         icon: 'none',
         duration: 1000,
         mask: true
@@ -298,24 +341,99 @@ Page({
   pmTap: function () {
     if (!this.data.tapNew) return;
     var inum = this.data.inputnum;
-    var tempnum;
+    var tempnum, tempinorout;
     if (inum.indexOf('-') < 0) {
       tempnum = '-' + inum;
     } else {
       tempnum = inum.slice(1);
     }
-    this.setData({ inputnum: tempnum });
+    tempinorout = this.data.inorout=='支出'?'收入':'支出';
+    this.setData({ inputnum: tempnum, inorout: tempinorout });
   },
   typeSelect: function () {
     this.loadCata();
     this.setData({ catagory: true });
+  },
+  dateSelect: function(e) {
+    var selectdate = e.detail.value;
+    this.setData({selectdate: selectdate});
+    this.freshDate();
+  },
+  freshDate: function () {
+    var date = this.data.selectdate;
+    var selectcata = this.data.selectcata;
+    var allitems;
+    if(selectcata==''){
+      allitems = this.data.itemsBack;
+    }else {
+      allitems = this.data.allItems;
+    }
+    var dateitems = [];
+    var flag = false;
+    for (var i = 0; i < allitems.length; i++) {
+      if (selectcata == '') {
+        if (allitems[i].date == date) {
+          flag = true;
+          dateitems.push(allitems[i]);
+        }
+      } else {
+        if (allitems[i].date == date && allitems[i].type == selectcata) {
+          flag = true;
+          dateitems.push(allitems[i]);
+        }
+      }
+    }
+    if(flag){
+      this.setData({ allItems: dateitems });
+      this.freshItem();
+      this.freshTotal();
+      var tempfuncs = [
+        { label: '日期重置', method: 'resetDate' },
+        { label: '分类筛选', method: 'typeSelect' },
+        { label: '新增', method: 'newItem' },
+        { label: '删除', method: 'deleteItem' }
+      ];
+      this.setData({ funcs: tempfuncs });
+    }else {
+      this.setData({ selectdate: '' });
+      wx.showToast({
+        title: '该日期下没有数据',
+        icon: 'none',
+        duration: 1500,
+        mask: true
+      });
+    }
+  },
+  resetDate: function() {
+    var tempfuncs = [
+      { label: '日期跳转', method: '' },
+      { label: '分类筛选', method: 'typeSelect' },
+      { label: '新增', method: 'newItem' },
+      { label: '删除', method: 'deleteItem' }
+    ];
+    this.setData({ funcs: tempfuncs, selectdate:'' });
+    var selectcata = this.data.selectcata;
+    var itemsback = [];
+    if (selectcata == '') {
+      itemsback = this.data.itemsBack;
+    } else {
+      var tempall = this.data.itemsBack;
+      for (var i = 0; i < tempall.length; i++) {
+        if (tempall[i].type == selectcata) {
+          itemsback.push(tempall[i]);
+        }
+      }
+    }
+    this.setData({ allItems: itemsback });
+    this.freshItem();
+    this.freshTotal();
   },
   leaveCata: function () {
     this.setData({ catagory: false });
   },
   toOrigin: function () {
     var tempfuncs = [
-      { label: '日期跳转', method: 'toDate' },
+      { label: '日期跳转', method: '' },
       { label: '分类筛选', method: 'typeSelect' },
       { label: '新增', method: 'newItem' },
       { label: '删除', method: 'deleteItem' }
@@ -395,7 +513,8 @@ Page({
     this.setData({ toView: 'id' + parseInt(range * 2 - 1) });
     this.freshTotal();
     var date = this.getDate();
-    this.setData({date:date});
+    var datestart = allitems[0].date;
+    this.setData({date:date, datestart:datestart});
     var tempdate = [];
     for (var i=0;i<allitems.length;i++){
       var datestr = allitems[i].date.substr(-2,2)+'日';
@@ -430,7 +549,7 @@ Page({
   },
   upper: function () {
     if (this.data.loadup) return;
-    console.log('posUp:' + this.data.posUp + 'posDown:' + this.data.posDown);
+    //console.log('posUp:' + this.data.posUp + 'posDown:' + this.data.posDown);
     var pos = this.data.posUp;
     if (pos == 0) {
       this.setData({ hidefirst: false });
@@ -481,7 +600,7 @@ Page({
   },
   lower: function (event) {
     if (this.data.loaddown) return;
-    console.log('posUp:' + this.data.posUp + 'posDown:' + this.data.posDown);
+    //console.log('posUp:' + this.data.posUp + 'posDown:' + this.data.posDown);
     var itemlength = this.data.allItems.length;
     var range = this.data.range;
     if (itemlength < range * 2) {
