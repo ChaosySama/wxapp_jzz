@@ -10,10 +10,15 @@ Page({
     range: 10,
     date: '',
     datestart: '',
+    day: '',
     inorout: '支出',
     totalout: 0,
     totalin: 0,
     toView: '',
+    inputcata: '',
+    inputcataid: '',
+    hidecata: false,
+    autofocus: false,
     hidenew: 'none',
     hidedelete: 'none',
     hidefirst: true,
@@ -31,6 +36,7 @@ Page({
     catapage: 0,
     itemsBack: [],
     dateshow:[],
+    //todo 本地化数据存储 读写
     allItems: [
       { id: 1, type: '交通', price: '1.50', date: '2017-02-11'},
       { id: 2, type: '衣服', price: '-2.88', date: '2017-02-17' },
@@ -514,7 +520,8 @@ Page({
     this.freshTotal();
     var date = this.getDate();
     var datestart = allitems[0].date;
-    this.setData({date:date, datestart:datestart});
+    var day = date.substr(-2,2);
+    this.setData({date:date, datestart:datestart, day: day});
     var tempdate = [];
     for (var i=0;i<allitems.length;i++){
       var datestr = allitems[i].date.substr(-2,2)+'日';
@@ -650,4 +657,44 @@ Page({
     }
     this.setData({dateshow:tempdateshow});
   },
+  typeTap: function(e) {
+    var id = e.currentTarget.dataset.id;
+    var tempitems = this.data.items;
+    this.setData({ hidecata: true, autofocus: true});
+    for(var i=0;i<tempitems.length;i++){
+      if(tempitems[i].id == id){
+        this.setData({ inputcata: tempitems[i].type, inputcataid: id});
+        break;
+      }
+    }
+  },
+  inputBlur: function(e){
+    var inputvalue = e.detail.value;
+    var inputid = this.data.inputcataid;
+    this.setData({ hidecata: false, autofocus: false });
+    if (inputvalue == '') return;
+    var tempitemsback = this.data.itemsBack;
+    var tempallitems = this.data.allItems;
+    var tempitems = this.data.items;
+    for(var i = 0;i<tempitems.length;i++){
+      if(tempitems[i].id == inputid){
+        tempitems[i].type = inputvalue;
+        break;
+      }
+    }
+    for (var i = 0; i < tempallitems.length; i++) {
+      if (tempallitems[i].id == inputid) {
+        tempallitems[i].type = inputvalue;
+        break;
+      }
+    }
+    for (var i = 0; i < tempitemsback.length; i++) {
+      if (tempitemsback[i].id == inputid) {
+        tempitemsback[i].type = inputvalue;
+        break;
+      }
+    }
+    this.setData({ itemsBack: tempitemsback, allItems: tempallitems, items: tempitems });
+    this.setData({ inputcata: '', inputcataid: '' });
+  }
 })

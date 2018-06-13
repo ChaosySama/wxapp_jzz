@@ -1,5 +1,8 @@
 <!--index.wxml-->
 <view class='body' style='height:{{winHeight}}px'>
+  <view style="display:{{hidecata?'flex' : 'none'}};" class='newcata'>
+    <input bindblur="inputBlur" placeholder="修改分类，最大长度3" maxlength="3" focus='{{autofocus}}' value='{{inputcata}}'/>
+  </view>
   <view class="navi">
     <view class='header'>
       <view>我的账本</view>
@@ -18,7 +21,7 @@
         <view style="display:flex">
           <image src="../image/remove.png" style="display:{{hidedelete}}" class="deleteitem" bindtap="deleteTap" data-idx="{{index}}" data-id="{{item.id}}"></image>
           <view class="item">
-            <view class="type">{{item.type}}</view>
+            <view class="type" bindtap='typeTap' data-id='{{item.id}}'>{{item.type}}</view>
             <view class="price">￥{{item.price}}</view>
             <view class="date" bindtap='dateTap' data-id='{{item.id}}'>{{dateshow[item.id-1]}}</view>
           </view>
