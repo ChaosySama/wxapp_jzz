@@ -438,12 +438,23 @@ Page({
     this.setData({ catagory: false });
   },
   toOrigin: function () {
-    var tempfuncs = [
-      { label: '日期跳转', method: '' },
-      { label: '分类筛选', method: 'typeSelect' },
-      { label: '新增', method: 'newItem' },
-      { label: '删除', method: 'deleteItem' }
-    ];
+    var selectdate = this.data.selectdate;
+    var tempfuncs = [];
+    if(selectdate == ''){
+      tempfuncs = [
+        { label: '日期跳转', method: '' },
+        { label: '分类筛选', method: 'typeSelect' },
+        { label: '新增', method: 'newItem' },
+        { label: '删除', method: 'deleteItem' }
+      ];
+    }else {
+      tempfuncs = [
+        { label: '日期重置', method: 'resetDate' },
+        { label: '分类筛选', method: 'typeSelect' },
+        { label: '新增', method: 'newItem' },
+        { label: '删除', method: 'deleteItem' }
+      ];
+    }
     this.setData({ funcs: tempfuncs });
     var tapNewflag = this.data.tapNew;
     if (tapNewflag) {
