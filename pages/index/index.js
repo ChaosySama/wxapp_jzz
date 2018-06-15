@@ -7,7 +7,7 @@ Page({
     catagory: false,
     winHeight: 0,
     inputnum: '-0',
-    range: 10,
+    range: 50,
     date: '',
     datestart: '',
     day: '',
@@ -36,8 +36,9 @@ Page({
     catapage: 0,
     itemsBack: [],
     dateshow:[],
-    //todo 本地化数据存储 读写
-    allItems: [
+    allItems: [],
+    /*
+    allItems_debug: [
       { id: 1, type: '交通', price: '1.50', date: '2017-02-11'},
       { id: 2, type: '衣服', price: '-2.88', date: '2017-02-17' },
       { id: 3, type: '交通', price: '3.20', date: '2017-02-17' },
@@ -79,6 +80,7 @@ Page({
       { id: 39, type: '交通7', price: '39.50', date: '2017-02-23' },
       { id: 40, type: '吃饭', price: '40.20', date: '2017-02-24' },
     ],
+    */
     items: [],
     funcs: [
       { label: '日期跳转', method: '' },
@@ -247,9 +249,13 @@ Page({
     var range = this.data.range;
     var tempitems = this.data.allItems.slice(-range * 2);
     this.setData({ items: tempitems });
-    var tempposup = tempitems[0].id - 1;
-    var tempposdown = tempitems[tempitems.length - 1].id;
-    this.setData({ posUp: tempposup, posDown: tempposdown });
+    if(tempitems.length > 0) {
+      var tempposup = tempitems[0].id - 1;
+      var tempposdown = tempitems[tempitems.length - 1].id;
+      this.setData({ posUp: tempposup, posDown: tempposdown });
+    }else {
+      this.setData({posIp:0, posDown:0});
+    }
   },
   numTap: function (event) {
     if (!this.data.tapNew) return;
@@ -324,7 +330,12 @@ Page({
     var tempallitems = this.data.allItems;
     var backitems = this.data.itemsBack;
     var length = tempitems.length;
-    var newid = parseInt(tempitems[length - 1].id) + 1;
+    var newid;
+    if(tempitems.length > 0){
+      newid = parseInt(tempitems[length - 1].id) + 1;
+    }else {
+      newid = 1;
+    }
     var tempposdown = this.data.posDown;
     tempposdown++;
     var tempitem = {
@@ -520,17 +531,33 @@ Page({
     return items;
   },
   onLoad: function () {
+    var newflag = true;
+    try {
+      var value = wx.getStorageSync('items');
+      if (value) {
+        newflag = false;
+        this.setData({allItems: value});
+      }
+    } catch (e) {
+      console.log(e);
+    }
+    
     var res = wx.getSystemInfoSync();
     var contentHeight = res.windowHeight;
     this.setData({ winHeight: contentHeight });
-    this.freshItem();
+    if(!newflag) this.freshItem();
     var allitems= this.data.allItems;
     this.setData({ itemsBack: allitems});
     var range = this.data.range;
     this.setData({ toView: 'id' + parseInt(range * 2 - 1) });
     this.freshTotal();
     var date = this.getDate();
-    var datestart = allitems[0].date;
+    var datestart = '';
+    if(!newflag){
+      datestart = allitems[0].date;
+    }else {
+      datestart = date;
+    }
     var day = date.substr(-2,2);
     this.setData({date:date, datestart:datestart, day: day});
     var tempdate = [];
@@ -539,6 +566,19 @@ Page({
       tempdate.push(datestr);
     }
     this.setData({dateshow:tempdate});
+    wx.getNetworkType({
+      success: function (res) {
+        // wifi/2g/3g/4g/unknown(Android下不常见的网络类型)/none(无网络)
+        var networkType = res.networkType;
+        if (networkType != 'none' && networkType != 'unknown'){
+          //todo push data to remote
+        }
+      }
+    })
+  },
+  onHide: function(){
+    var data = this.data.itemsBack;
+    wx.setStorageSync('items', data);
   },
   freshTotal: function () {
     var totalout = Math.abs(this.totalOut());
